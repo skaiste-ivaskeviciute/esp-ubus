@@ -82,7 +82,7 @@ static int esp_get(struct ubus_context *ctx, struct ubus_object *obj,
 	double temperature = 0;
 	struct blob_attr *tb[__GET_DATA_MAX];
 	static struct blob_buf b;
-	
+	void *table;
 	// Gets data from user inputted JSON string
 	blobmsg_parse(get_policy, __GET_DATA_MAX, tb, blob_data(msg), blob_len(msg));
 	if (!tb[PORT]) {
@@ -125,8 +125,10 @@ static int esp_get(struct ubus_context *ctx, struct ubus_object *obj,
 
 	// Sends humidity and temperature as UBUS reply
 	blobmsg_buf_init(&b);
+	table = blobmsg_open_table(&b, "data");
 	blobmsg_add_double(&b,"temperature",temperature);
 	blobmsg_add_double(&b,"humidity",humidity);
+	blobmsg_close_table(&b, table);
 	blobmsg_add_u32(&b,"rc", SUCCESS);
 	blobmsg_add_string(&b,"status_message","Sensor read successfully");
 	ubus_send_reply(ctx, req, b.head);
