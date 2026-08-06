@@ -13,12 +13,12 @@ int get_port_pid_vid(struct blob_buf *buf)
 	int vid, pid;
 	char vid_formatted[5];
 	char pid_formatted[5];
-	void *table;
+	void *table, *devices_array;
 
 	if (result != SP_OK) {
 		return FAILURE;
 	}
-
+	devices_array = blobmsg_open_array(buf, "devices");
 	for (int i = 0; port_list[i] != NULL; i++) {
 		struct sp_port *port = port_list[i];
 		char *port_name = sp_get_port_name(port);
@@ -41,7 +41,7 @@ int get_port_pid_vid(struct blob_buf *buf)
 		blobmsg_add_string(buf, "productid", pid_formatted);
 		blobmsg_close_table(buf, table);
 	}
-
+	blobmsg_close_array(buf, devices_array);
 	sp_free_port_list(port_list);
 	return SUCCESS;
 }
