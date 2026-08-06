@@ -8,6 +8,7 @@ struct ubus_request_data;
 struct ubus_context;
 
 int get_port_pid_vid(struct blob_buf *buf);
+int check_vid_pid(int vid, int pid);
 int send_and_receive(struct ubus_context *ctx, struct ubus_request_data *req, char* port_name, char* data, char* response);
 int open_port(struct sp_port **port, char* port_name);
 int close_port(struct sp_port **port);

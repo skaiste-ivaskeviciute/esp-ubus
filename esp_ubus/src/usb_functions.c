@@ -31,6 +31,9 @@ int get_port_pid_vid(struct blob_buf *buf)
 
 		sp_get_port_usb_vid_pid(port_list[i], &vid, &pid);
 
+		if (check_vid_pid(vid, pid) != SUCCESS) {
+			continue;
+		}
 		table = blobmsg_open_table(buf, NULL);
 		blobmsg_add_string(buf, "port", port_name);
 
@@ -44,6 +47,33 @@ int get_port_pid_vid(struct blob_buf *buf)
 	blobmsg_close_array(buf, devices_array);
 	sp_free_port_list(port_list);
 	return SUCCESS;
+}
+
+// Checks if the device is an ESP microcontroller by comparing against valid productIDs and vendorIDs
+int check_vid_pid(int vid, int pid)
+{
+	int valid_vid[] = {0x10c4};
+	int valid_pid[] = {0xea60, 0xea61, 0xea63};
+	int vid_is_valid = FAILURE;
+	int pid_is_valid = FAILURE;
+
+	for (int i = 0; i < sizeof(valid_vid); i++) {
+		if (vid == valid_vid[i]) {
+			vid_is_valid = SUCCESS;
+		}
+	}
+
+	if (vid_is_valid == FAILURE) {
+		return FAILURE;
+	}
+
+	for (int i = 0; i < sizeof(valid_pid); i++) {
+		if (pid == valid_pid[i]) {
+			pid_is_valid = SUCCESS;
+		}
+	}
+
+	return pid_is_valid;
 }
 
 // Opens a port, sends data to it, receives data from it, and closes the port 
