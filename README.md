@@ -3,7 +3,7 @@
 For this task you will create a program which will let you control connected ESP micro controllers to the router over ubus.
 
 Ask your internship manager to give you ESP micro controller. ESP controller will already have a
-special firmware uploaded onto it which will let you control ESP pins over the serial. Documentation on how to control the micro controller can be found here.
+special firmware uploaded onto it which will let you control ESP pins over the serial. Documentation on how to control the micro controller can be found [here](https://github.com/janenasl/esp_control_over_serial).
 
 Ubus should provide these methods:
 
